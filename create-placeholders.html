@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placeholder Image Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .placeholder {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .hero-placeholder {
+            width: 600px;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .download-link {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        .download-link:hover {
+            background: #229954;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Placeholder Image Generator</h1>
+        <p>This tool generates placeholder images for the Shopping Hub website.</p>
+        
+        <h2>Hero Image Placeholder</h2>
+        <div class="hero-placeholder" id="heroPlaceholder">
+            Shopping Hub<br>
+            <span style="font-size: 18px;">Your Ultimate Shopping Destination</span>
+        </div>
+        <button onclick="downloadHero()">Download Hero Image</button>
+        
+        <h2>Product Image Placeholders</h2>
+        <div class="placeholder" id="productPlaceholder1">
+            Product Image<br>
+            <span style="font-size: 16px;">High Quality</span>
+        </div>
+        <button onclick="downloadProduct1()">Download Product Image 1</button>
+        
+        <div class="placeholder" id="productPlaceholder2">
+            Electronics<br>
+            <span style="font-size: 16px;">Smart Devices</span>
+        </div>
+        <button onclick="downloadProduct2()">Download Product Image 2</button>
+        
+        <div class="placeholder" id="productPlaceholder3">
+            Fashion<br>
+            <span style="font-size: 16px;">Trendy Styles</span>
+        </div>
+        <button onclick="downloadProduct3()">Download Product Image 3</button>
+        
+        <div class="placeholder" id="productPlaceholder4">
+            Sports<br>
+            <span style="font-size: 16px;">Active Lifestyle</span>
+        </div>
+        <button onclick="downloadProduct4()">Download Product Image 4</button>
+    </div>
+
+    <script>
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        function html2canvas(element, filename) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const rect = element.getBoundingClientRect();
+            
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add text
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            const lines = element.innerText.split('\n');
+            const lineHeight = 30;
+            const startY = canvas.height / 2 - (lines.length - 1) * lineHeight / 2;
+            
+            lines.forEach((line, index) => {
+                const fontSize = line.includes('Shopping Hub') ? 32 : 
+                               line.includes('Product') || line.includes('Electronics') || 
+                               line.includes('Fashion') || line.includes('Sports') ? 24 : 16;
+                ctx.font = `bold ${fontSize}px Arial`;
+                ctx.fillText(line, canvas.width / 2, startY + index * lineHeight);
+            });
+            
+            downloadCanvas(canvas, filename);
+        }
+
+        function downloadHero() {
+            html2canvas(document.getElementById('heroPlaceholder'), 'hero-image.png');
+        }
+
+        function downloadProduct1() {
+            html2canvas(document.getElementById('productPlaceholder1'), 'product-1.png');
+        }
+
+        function downloadProduct2() {
+            html2canvas(document.getElementById('productPlaceholder2'), 'product-2.png');
+        }
+
+        function downloadProduct3() {
+            html2canvas(document.getElementById('productPlaceholder3'), 'product-3.png');
+        }
+
+        function downloadProduct4() {
+            html2canvas(document.getElementById('productPlaceholder4'), 'product-4.png');
+        }
+    </script>
+</body>
+</html> 

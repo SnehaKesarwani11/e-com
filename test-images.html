@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Test - Shopping Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .hero-test {
+            width: 600px;
+            height: 400px;
+            border: 2px solid #333;
+            margin: 10px 0;
+        }
+        .product-test {
+            width: 400px;
+            height: 400px;
+            border: 2px solid #333;
+            margin: 10px 0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Shopping Hub - Image Test Page</h1>
+        <p>This page tests all image loading functionality to ensure everything works properly.</p>
+        
+        <div class="test-section">
+            <h2>1. Hero Image Test</h2>
+            <p>Testing the main hero image with fallback:</p>
+            <div class="hero-test">
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&q=80" 
+                     alt="Hero Test" 
+                     onerror="this.src='images/hero-fallback.svg'; this.onerror=null;"
+                     style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="status info">Hero image should load from Unsplash or fallback to local SVG</div>
+        </div>
+
+        <div class="test-section">
+            <h2>2. Product Image Test</h2>
+            <p>Testing product images with fallback:</p>
+            <div class="product-test">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop" 
+                     alt="Product Test" 
+                     onerror="this.src='images/product-fallback.svg'; this.onerror=null;"
+                     style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="status info">Product image should load from Unsplash or fallback to local SVG</div>
+        </div>
+
+        <div class="test-section">
+            <h2>3. Local Fallback Test</h2>
+            <p>Testing local fallback images directly:</p>
+            <div style="display: flex; gap: 20px;">
+                <div>
+                    <h3>Hero Fallback</h3>
+                    <img src="images/hero-fallback.svg" alt="Hero Fallback" style="width: 300px; height: 200px; border: 1px solid #ccc;">
+                </div>
+                <div>
+                    <h3>Product Fallback</h3>
+                    <img src="images/product-fallback.svg" alt="Product Fallback" style="width: 200px; height: 200px; border: 1px solid #ccc;">
+                </div>
+            </div>
+            <div class="status success">Local fallback images should always load</div>
+        </div>
+
+        <div class="test-section">
+            <h2>4. API Test</h2>
+            <p>Testing the demo products API:</p>
+            <button onclick="testAPI()">Test Demo Products API</button>
+            <div id="apiResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>5. Website Navigation</h2>
+            <p>Navigate to the main website:</p>
+            <button onclick="window.open('http://localhost:3000', '_blank')">Open Shopping Hub</button>
+            <div class="status info">Opens the main website in a new tab</div>
+        </div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('apiResult');
+            resultDiv.innerHTML = '<div class="status info">Testing API...</div>';
+            
+            try {
+                const response = await fetch('/api/demo/products');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="status success">
+                            ✅ API Test Successful!<br>
+                            Found ${data.products.length} products<br>
+                            First product: ${data.products[0].name}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="status error">
+                            ❌ API Test Failed<br>
+                            Status: ${response.status}<br>
+                            Message: ${data.message || 'Unknown error'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ API Test Failed<br>
+                        Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-test API on page load
+        window.addEventListener('load', () => {
+            setTimeout(testAPI, 1000);
+        });
+    </script>
+</body>
+</html> 
